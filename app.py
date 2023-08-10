@@ -50,20 +50,45 @@ def searchByName():
     return jsonify(val)
 
 # route pour ajouter un nouveau client
-# 1- methode: POST
-# 2- parametres (json): code_client, nom_client, solde, etat
-# 3- route: /api/addClient
-# appel: ???????
 @app.route("/api/addClient", methods = ['POST'])
-def addClient(): # methode appelé lors de l'appel de la route http://192.168.1.4:3003/api/addClient
-    # recupere les données envoyés par le client (parametres)
-    # données = {"nom_client":"pierrot", "code_client":"CL768", "solde":0.0, "etat":1}
-    donnees = json.loads(request.data)
-    
+def addClient(): 
+    print(request.json)
+    donnees = json.loads(request.data)    
     # appel de fonction pour ajout d'un nouveau client
-    val = addNewClient(config = config, data = donnees)
-    
+    val = addNewClient(config = config, data = donnees)    
     # retourne un resultat
+    return jsonify(val)
+
+@app.route("/api/updateClient", methods = ['PUT'])
+def onUpdateClient(): 
+    donnees = json.loads(request.data)
+    # appel de fonction pour ajout d'un nouveau client
+    val = updateClient(config = config, data = donnees)    
+    # retourne un resultat
+    return jsonify(val)
+
+@app.route("/api/deleteClient", methods = ['DELETE'])
+def deleteClientById(): 
+    code = request.args.get("code", default = "", type = str)    
+    val = deleteClient(config = config, code = code)        
+    return jsonify(val)
+
+@app.route("/api/totalSolde", methods = ['GET'])
+def gettotalSolde():
+    name = request.args.get("name", default = "", type = str)
+    val = getTotalSolde(config = config)
+    return jsonify(val)
+
+@app.route("/api/nbClient", methods = ['GET'])
+def totalClient():
+    name = request.args.get("name", default = "", type = str)
+    val = getNbTotalClient(config = config)
+    return jsonify(val)
+
+@app.route("/api/searchByEtat", methods = ['GET'])
+def searchByEtat():
+    statut = request.args.get("etat", default = "", type = str)
+    val = findClientByEtat(config = config, etat=statut)
     return jsonify(val)
 
 
